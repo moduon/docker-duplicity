@@ -149,6 +149,13 @@ for njob, command in sorted(to_run.items()):
         msg = "ok" if success else result
         _ping_uptime_kuma(message, uptime_kuma_url_env, status, msg)
 
+# Report results to uptime-kuma once for the whole batch
+batch_uptime_kuma_url = environ.get("BATCH_UPTIME_KUMA_URL") or None
+if batch_uptime_kuma_url is not None:
+    status = "down" if failed else "up"
+    msg = "\r\n".join(message) if failed else "ok"
+    _ping_uptime_kuma(message, batch_uptime_kuma_url, status, msg)
+
 # Report results
 if all((smtp_report_success or failed, smtp_host, smtp_port, from_, to, subject)):
     logging.info("Sending email report")
