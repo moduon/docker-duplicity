@@ -125,12 +125,12 @@ for njob, command in sorted(to_run.items()):
         if "?" in uptime_kuma_url_env:
             uptime_kuma_url_env = uptime_kuma_url_env[: uptime_kuma_url_env.find("?")]
 
-        if failed:
-            status = "down"
-            msg = result
-        else:
+        if success:
             status = "up"
             msg = "ok"
+        else:
+            status = "down"
+            msg = result
         try:
             message += [f"Pinging {uptime_kuma_url_env}"]
             logging.info(message[-1])
